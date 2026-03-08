@@ -26,3 +26,24 @@ const createOrder = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+// GET /order/:orderId - Get order by orderId
+const getOrderById = async (req, res) => {
+    try {
+        const order = await Order.findOne({ orderId: req.params.orderId });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        return res.status(200).json(order);
+    } catch (error) {
+        console.error('Error fetching order:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+module.exports = {
+    createOrder,
+    getOrderById
+};
