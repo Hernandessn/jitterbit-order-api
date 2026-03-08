@@ -43,7 +43,20 @@ const getOrderById = async (req, res) => {
     }
 };
 
+// GET /order/list - List all orders
+const listOrders = async (req, res) => {
+    try {
+        const orders = await Order.find();
+
+        return res.status(200).json(orders);
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     createOrder,
-    getOrderById
+    getOrderById,
+    listOrders
 };
