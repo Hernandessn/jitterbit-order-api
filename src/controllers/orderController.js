@@ -55,8 +55,28 @@ const listOrders = async (req, res) => {
     }
 };
 
+// PUT /order/:orderId - Update order by orderId
+const updateOrder = async (req, res) => {
+    try {
+        const order = await Order.findOneAndUpdate(
+            {orderId: req.params.orderId},
+            mapOrder(req.body),
+            {new: true, runValidators: true}
+        );
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        return res.status(200).json({ message: 'Order updated successfully', order: order });
+    } catch (error) {
+        console.error('Error updating order:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};  
+
 module.exports = {
     createOrder,
     getOrderById,
-    listOrders
+    listOrders,
+    updateOrder
 };
