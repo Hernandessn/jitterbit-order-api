@@ -59,9 +59,9 @@ const listOrders = async (req, res) => {
 const updateOrder = async (req, res) => {
     try {
         const order = await Order.findOneAndUpdate(
-            {orderId: req.params.orderId},
+            { orderId: req.params.orderId },
             mapOrder(req.body),
-            {new: true, runValidators: true}
+            { new: true, runValidators: true }
         );
 
         if (!order) {
@@ -72,11 +72,28 @@ const updateOrder = async (req, res) => {
         console.error('Error updating order:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
-};  
+};
+
+// DELETE /order/:orderId - Delete order by orderId
+const deleteOrder = async (req, res) => {
+    try {
+        const order = await Order.findOneAndDelete({ orderId: req.params.orderId });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        return res.status(200).json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting order:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 module.exports = {
     createOrder,
     getOrderById,
     listOrders,
-    updateOrder
+    updateOrder,
+    deleteOrder
 };
